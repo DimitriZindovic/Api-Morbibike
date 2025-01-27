@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
     public function index()
     {
-        return User::all();
+        return UserResource::collection(User::all());
     }
 
     public function store(Request $request)
@@ -19,7 +21,7 @@ class UserController extends Controller
         $user = new User($validated);
         $user->save();
 
-        return response()->json();
+        return response()->json()->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function update(User $user, Request $request)

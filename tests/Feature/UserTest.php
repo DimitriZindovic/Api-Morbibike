@@ -14,7 +14,7 @@ test('can create user', function () {
         'name' => 'User name',
         'surname' => 'User surname',
     ]);
-    $response->assertStatus(200);
+    $response->assertStatus(201);
 
     expect(User::count())->toBe($count + 1);
 });

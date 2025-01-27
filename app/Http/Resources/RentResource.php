@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Rentesource extends JsonResource
+class RentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,7 @@ class Rentesource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'bikeId' => new BikeResource($this->whenLoaded('bikes')),
+            'bike' => new BikeResource($this->whenLoaded('bike')),
             'name' => $this->name,
             'startDate' => $this->start_date,
             'endDate' => $this->end_date,

@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Bike;
 use Illuminate\Http\Request;
+use App\Http\Resources\BikeResource;
+use Symfony\Component\HttpFoundation\Response;
 
 class BikeController extends Controller
 {
     public function index()
     {
-        return Bike::all();
+        return BikeResource::collection(Bike::all());
     }
 
     public function store(Request $request)
@@ -19,7 +21,7 @@ class BikeController extends Controller
         $bike = new Bike($validated);
         $bike->save();
 
-        return response()->json();
+        return response()->json()->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function update(Bike $bike, Request $request)

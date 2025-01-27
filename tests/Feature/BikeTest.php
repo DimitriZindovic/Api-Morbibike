@@ -15,7 +15,7 @@ test('can create bikes', function () {
         'color' => 'Bike color',
         'type' => 'Bike type',
     ]);
-    $response->assertStatus(200);
+    $response->assertStatus(201);
 
     expect(Bike::count())->toBe($count + 1);
 });

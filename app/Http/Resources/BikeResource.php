@@ -19,6 +19,7 @@ class BikeResource extends JsonResource
             'name' => $this->name,
             'color' => $this->color,
             'type' => $this->type,
+            'rents' => RentResource::collection($this->whenLoaded('rents')),
         ];
     }
 }

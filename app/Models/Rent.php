@@ -18,7 +18,6 @@ class Rent extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'bike_id',
         'name',
         'start_date',
         'end_date',
@@ -45,8 +44,8 @@ class Rent extends Model
             'name' => 'required|string',
             'start_date'=> 'required|date',
             'end_date'=> 'required|date',
-            'user_id'=> 'required|array',
-            'user_id.*' => 'exists:users,id',
+            'user_ids'=> 'required|array',
+            'user_ids.*' => 'exists:users,id',
         ];
     }
 
@@ -55,7 +54,7 @@ class Rent extends Model
         return static::storeRules();
     }
 
-    protected function bike(): BelongsTo
+    public function bike(): BelongsTo
     {
         return $this->belongsTo(Bike::class);
     }

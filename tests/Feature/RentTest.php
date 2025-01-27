@@ -11,30 +11,45 @@ test('can list rents', function () {
 });
 
 test('can create rent', function () {
-    $count = Rent::count();
-    $response = $this->post('/rents', [
-        'bike_id' => Bike::first()->id,
-        'name' => 'Rent name',
-        'start_date' => '2025-01-24',
-        'end_date' => '2025-01-25',
-        'user_id' => [User::inRandomOrder()->first()->id, User::inRandomOrder()->first()->id],
-    ]);
-    $response->assertStatus(200);
+    $rent = Rent::first();
+    $bike = Bike::first();
+    $users = User::inRandomOrder()->take(2)->get();
 
-    expect(Rent::count())->toBe($count + 1);
+    $response = $this->post("/rents", [
+        'bike_id' => $bike->id,
+        'name' => 'Rent name updated',
+        'start_date' => '2025-01-24',
+        'end_date' => '2025-01-26',
+        'user_ids' => $users->pluck('id')->toArray(),
+    ]);
+
+    $response->assertStatus(201);
+
+    $rent = Rent::latest()->first();
+
+    expect($rent->bike->id)->toBe($bike->id);
+    expect($rent->users->pluck('id')->toArray())->toBe($users->pluck('id')->toArray());
 });
 
 test('can update rent', function () {
     $rent = Rent::first();
+    $bike = Bike::first();
+    $users = User::inRandomOrder()->take(2)->get();
+
     $response = $this->put("/rents/{$rent->id}", [
         'bike_id' => Bike::first()->id,
         'name' => 'Rent name updated',
         'start_date' => '2025-01-24',
         'end_date' => '2025-01-26',
-        'user_id' => [User::inRandomOrder()->first()->id, User::inRandomOrder()->first()->id],
+        'user_ids' => $users->pluck('id')->toArray(),
     ]);
 
     $response->assertStatus(200);
+
+    $rent->refresh();
+
+    expect($rent->bike->id)->toBe($bike->id);
+    expect($rent->users->pluck('id')->toArray())->toBe($users->pluck('id')->toArray());
 });
 
 test('can delete rent', function () {

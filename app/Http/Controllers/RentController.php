@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RentResource;
 use App\Models\Rent;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class RentController extends Controller
 {
     public function index()
     {
-        return Rent::all();
+        return RentResource::collection(Rent::all());
     }
 
     public function store(Request $request)
@@ -17,10 +19,11 @@ class RentController extends Controller
         $validated = $request->validate(Rent::storeRules());
 
         $rent = new Rent($validated);
+        $rent->bike()->associate($validated['bike_id']);
         $rent->save();
-        $rent->users()->sync($validated['user_id']);
+        $rent->users()->sync($validated['user_ids']);
 
-        return response()->json();
+        return response()->json()->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function update(Rent $rent, Request $request)
@@ -29,7 +32,7 @@ class RentController extends Controller
 
         $rent->fill($validated);
         $rent->save();
-        $rent->users()->sync($validated['user_id']);
+        $rent->users()->sync($validated['user_ids']);
 
         return response()->json();
     }

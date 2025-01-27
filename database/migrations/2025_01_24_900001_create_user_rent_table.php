@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('rent_id')->constrained('rents')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('bike_id')->constrained('bikes')->onDelete('cascade');
             $table->timestamps();
         });
     }
