@@ -13,15 +13,16 @@ class RentController extends Controller
     {
         return RentResource::collection(Rent::all());
     }
-
     public function store(Request $request)
     {
         $validated = $request->validate(Rent::storeRules());
 
         $rent = new Rent($validated);
-        $rent->bike()->associate($validated['bike_id']);
         $rent->save();
-        $rent->users()->sync($validated['user_ids']);
+
+        foreach ($validated['users'] as $userBike) {
+            $rent->users()->attach($userBike['user'], ['bike_id' => $userBike['bike']]);
+        }
 
         return response()->json()->setStatusCode(Response::HTTP_CREATED);
     }
@@ -32,7 +33,11 @@ class RentController extends Controller
 
         $rent->fill($validated);
         $rent->save();
-        $rent->users()->sync($validated['user_ids']);
+
+        $rent->users()->detach();
+        foreach ($validated['users'] as $userBike) {
+            $rent->users()->attach($userBike['user'], ['bike_id' => $userBike['bike']]);
+        }
 
         return response()->json();
     }

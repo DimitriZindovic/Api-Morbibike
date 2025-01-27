@@ -11,45 +11,49 @@ test('can list rents', function () {
 });
 
 test('can create rent', function () {
-    $rent = Rent::first();
-    $bike = Bike::first();
-    $users = User::inRandomOrder()->take(2)->get();
-
+    $users = User::inRandomOrder()->take(2)->get()->pluck('id')->toArray();
+    var_dump($users);
+    $bikes = Bike::inRandomOrder()->take(2)->get()->pluck('id')->toArray();
     $response = $this->post("/rents", [
-        'bike_id' => $bike->id,
-        'name' => 'Rent name updated',
+        'name' => 'Rent name',
         'start_date' => '2025-01-24',
         'end_date' => '2025-01-26',
-        'user_ids' => $users->pluck('id')->toArray(),
+        'users' => [
+            ['user' => $users[0], 'bike' =>  $bikes[0]],
+            ['user' => $users[1], 'bike' =>  $bikes[1]],
+        ],
     ]);
 
     $response->assertStatus(201);
 
     $rent = Rent::latest()->first();
+    var_dump($rent->users->pluck('id')->toArray());
 
-    expect($rent->bike->id)->toBe($bike->id);
-    expect($rent->users->pluck('id')->toArray())->toBe($users->pluck('id')->toArray());
+    expect($rent->users->pluck('id')->toArray())->toBe($users);
+    expect($rent->users->pluck('pivot.bike_id')->toArray())->toBe($bikes);
 });
 
 test('can update rent', function () {
     $rent = Rent::first();
-    $bike = Bike::first();
-    $users = User::inRandomOrder()->take(2)->get();
+    $users = User::inRandomOrder()->take(2)->get()->pluck('id')->toArray();
+    $bikes = Bike::inRandomOrder()->take(2)->get()->pluck('id')->toArray();
 
     $response = $this->put("/rents/{$rent->id}", [
-        'bike_id' => Bike::first()->id,
         'name' => 'Rent name updated',
         'start_date' => '2025-01-24',
         'end_date' => '2025-01-26',
-        'user_ids' => $users->pluck('id')->toArray(),
+        'users' => [
+            ['user' => $users[0], 'bike' =>  $bikes[0]],
+            ['user' => $users[1], 'bike' =>  $bikes[1]],
+        ],
     ]);
 
     $response->assertStatus(200);
 
     $rent->refresh();
 
-    expect($rent->bike->id)->toBe($bike->id);
-    expect($rent->users->pluck('id')->toArray())->toBe($users->pluck('id')->toArray());
+    expect($rent->users->pluck('id')->toArray())->toBe($users);
+    expect($rent->users->pluck('pivot.bike_id')->toArray())->toBe($bikes);
 });
 
 test('can delete rent', function () {

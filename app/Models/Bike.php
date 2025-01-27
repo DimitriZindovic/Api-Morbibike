@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Bike extends Model
 {
@@ -50,8 +50,8 @@ class Bike extends Model
         return static::storeRules();
     }
 
-    protected function rents(): HasMany
+    public function rents(): BelongsToMany
     {
-        return $this->hasMany(Rent::class, );
+        return $this->belongsToMany(Rent::class, 'rent_user');
     }
 }

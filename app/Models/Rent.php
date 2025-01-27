@@ -40,12 +40,12 @@ class Rent extends Model
     public static function storeRules(): array
     {
         return [
-            'bike_id' => 'required|exists:bikes,id',
             'name' => 'required|string',
-            'start_date'=> 'required|date',
-            'end_date'=> 'required|date',
-            'user_ids'=> 'required|array',
-            'user_ids.*' => 'exists:users,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+            'users' => 'required|array',
+            'users.*.user' => 'exists:users,id',
+            'users.*.bike' => 'exists:bikes,id',
         ];
     }
 
@@ -54,13 +54,13 @@ class Rent extends Model
         return static::storeRules();
     }
 
-    public function bike(): BelongsTo
+    public function bikes(): BelongsToMany
     {
-        return $this->belongsTo(Bike::class);
+        return $this->belongsToMany(Bike::class, 'rent_user')->withPivot('bike_id');
     }
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'rent_user');
+        return $this->belongsToMany(User::class, 'rent_user')->withPivot('bike_id');
     }
 }
