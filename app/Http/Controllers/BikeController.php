@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Bike;
 use Illuminate\Http\Request;
 use App\Http\Resources\BikeResource;
+use SupplementBacon\LaravelAPIToolkit\Http\Resources\PaginatedCollection;
+use SupplementBacon\LaravelPaginable\Requests\IndexPaginatedRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class BikeController extends Controller
 {
-    public function index()
+    public function index(IndexPaginatedRequest $request)
     {
-        return BikeResource::collection(Bike::all());
+        $items = Bike::paginator($request);
+        return new PaginatedCollection($items);
     }
 
     public function store(Request $request)

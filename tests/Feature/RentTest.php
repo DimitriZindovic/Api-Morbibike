@@ -5,7 +5,7 @@ use App\Models\Rent;
 use App\Models\User;
 
 test('can list rents', function () {
-    $response = $this->get('/rents');
+    $response = $this->get('/rents?pagination%5Bcurrent%5D=1&pagination%5BpageSize%5D=1');
 
     $response->assertStatus(200);
 });

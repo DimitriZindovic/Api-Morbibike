@@ -3,7 +3,7 @@
 use App\Models\Bike;
 
 test('can list bikes', function () {
-    $response = $this->get('/bikes');
+    $response = $this->get('/bikes?pagination%5Bcurrent%5D=1&pagination%5BpageSize%5D=1');
 
     $response->assertStatus(200);
 });

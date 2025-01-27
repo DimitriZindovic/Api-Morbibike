@@ -12,7 +12,9 @@
         "php": "^8.2",
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "supplement-bacon/laravel-api-toolkit": "^1.0",
+        "supplement-bacon/laravel-paginable": "dev-main"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -23,6 +25,16 @@
         "nunomaduro/collision": "^8.1",
         "pestphp/pest": "^3.7"
     },
+    "repositories": [
+        {
+            "url": "https://github.com/Supplement-Bacon/laravel-api-toolkit",
+            "type": "git"
+        },
+        {
+            "url": "https://github.com/Supplement-Bacon/laravel-paginable",
+            "type": "git"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "App\\": "app/",

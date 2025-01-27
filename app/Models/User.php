@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use SupplementBacon\LaravelPaginable\Paginable;
 
 class User extends Model
 {
+    use Paginable;
+
+    const RESOURCE = UserResource::class;
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 

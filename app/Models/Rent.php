@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use App\Http\Resources\RentResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use SupplementBacon\LaravelPaginable\Paginable;
 
 class Rent extends Model
 {
+    use Paginable;
+
+    const RESOURCE = RentResource::class;
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
@@ -56,7 +61,7 @@ class Rent extends Model
 
     public function bikes(): BelongsToMany
     {
-        return $this->belongsToMany(Bike::class, 'rent_user')->withPivot('bike_id');
+        return $this->belongsToMany(Bike::class, 'rent_user')->withPivot('user_id');
     }
 
     public function users(): BelongsToMany

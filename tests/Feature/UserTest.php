@@ -3,7 +3,7 @@
 use App\Models\User;
 
 test('can list users', function () {
-    $response = $this->get('/users');
+    $response = $this->get('/users?pagination%5Bcurrent%5D=1&pagination%5BpageSize%5D=1');
 
     $response->assertStatus(200);
 });

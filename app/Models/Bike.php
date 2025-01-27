@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use App\Http\Resources\BikeResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use SupplementBacon\LaravelPaginable\Paginable;
 
 class Bike extends Model
 {
+    use Paginable;
+
+    const RESOURCE = BikeResource::class;
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
